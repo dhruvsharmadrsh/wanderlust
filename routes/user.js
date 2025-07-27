@@ -33,10 +33,9 @@ router.get('/login',(req,res)=>{
 })
 
 router.post('/login',passport.authenticate('local', { failureRedirect: '/login' ,failureFlash:true}),async(req,res)=>{
-    req.flash('success','Welcome Back To WanderLust') 
-    // res.redirect('/listings')
-      res.send("/hello");
-
+    req.flash('success','Welcome Back To WanderLust')
+    // Change the redirect URL from "/hello" to "/listings"
+    res.redirect('/listings'); // Changed from res.send("/hello");
 })
 
 module.exports = router;
