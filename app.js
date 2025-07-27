@@ -8,9 +8,16 @@ const Review=require("./models/review.js")
 const {listingSchema,reviewSchema}=require('./schema.js');
 const session=require("express-session")
 const flash=require("connect-flash");
-const listings=require('./routes/listing.js');
-const reviews=require('./routes/review.js')
 
+
+const listingRoute=require('./routes/listing.js');
+const reviewRoute=require('./routes/review.js')
+const userRoute=require("./routes/user.js")
+ 
+
+const User=require("./models/user.js");
+const passport=require("passport");
+const LocalStrategy=require("passport-local");
 
 const app=express();
 app.set('view engine','ejs');
@@ -36,6 +43,11 @@ const sessionOptions={
 app.use(session(sessionOptions));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser);
+passport.deserializeUser(User.deserializeUser);
 
 
 const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust"
@@ -66,9 +78,20 @@ app.use((req,res,next)=>{
     next();
 })
 
-app.use('/listings',listings)
-app.use('/listings/:id/reviews',reviews)
 
+app.get("/demouser",async(req,res)=>{
+    let fakeUser=User({
+        email:'student@gmail.com',
+        username:'delta-student'
+    })
+    let registeredUser=await User.register(fakeUser,"helloWorld");
+    res.send(registeredUser);
+})
+
+
+app.use('/listings',listingRoute)
+app.use('/listings/:id/reviews',reviewRoute)
+app.use("/",userRoute)
 
 
 
