@@ -32,10 +32,14 @@ router.get('/login',(req,res)=>{
     res.render("users/login.ejs");
 })
 
-router.post('/login',passport.authenticate('local', { failureRedirect: '/login' ,failureFlash:true}),async(req,res)=>{
-    req.flash('success','Welcome Back To WanderLust')
-    // Change the redirect URL from "/hello" to "/listings"
-    res.redirect('/listings'); // Changed from res.send("/hello");
-})
+// routes/user.js
+router.post("/login", passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true
+}), (req, res) => {
+    req.flash("success", "Welcome back!");
+    res.redirect("/listings"); // or dashboard
+});
+
 
 module.exports = router;
