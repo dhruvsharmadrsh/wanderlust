@@ -46,8 +46,8 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser);
-passport.deserializeUser(User.deserializeUser);
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust"
